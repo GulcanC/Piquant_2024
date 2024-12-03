@@ -1,11 +1,19 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const path = require('path');
+require('dotenv').config({path: './vars/.env'})
 
-mongoose.connect('mongodb+srv://GC:GC_2024@clusterGC2024.65ftf.mongodb.net/',
+// security
+const mongoSanitize = require('express-mongo-sanitize');
+const hpp = require('hpp');
+const morgan = require('morgan');
 
-).then(() => console.log('✅ MongoDB connection is successfull!'))
-    .catch(() => console.log('MongoDB connection is NOT successfull!'));
+// mongoose.connect('mongodb+srv://GC:GC_2024@clusterGC2024.65ftf.mongodb.net/',
+mongoose.connect(`mongodb+srv://${process.env.DB_USR_NAME}:${process.env.DB_PSW}@${process.env.DB_CLUSTER}.65ftf.mongodb.net/`)
+
+.then(() => console.log('✅ MongoDB connection is successfull!'))
+    .catch(() => console.log('⛔️ MongoDB connection is NOT successfull!'));
 
 app.use(express.json());
 // La méthode app.use() vous permet d'attribuer un middleware à une route spécifique de votre application.
@@ -18,12 +26,11 @@ app.use((req, res, next) => {
     next()
 })
 
-app.post('/api/stuff', (req, res, next) => {
-    console.log(req.body);
-    res.status(201).json({
-        message: 'Object is created!'
-    })
-})
+app.use(bodyParser.json()); // transformer le corps, body en JSON object JS
+app.use(mongoSanitize()); // It sanitizes inputs against query selector injection attacks
+app.use(hpp()); // hpp moiddleware to protect against HTTP parameter pollution attacks
+app.use(morgan('combined')) // morgan middleware to create logs
+
 // add middleware
 // next() method comes from middleware, it allows the middleware passes to next middleware. 
 // for example here the app Express contains four elements of middleware. 
@@ -54,19 +61,5 @@ app.use((req, res) => {
 
 }) */
 
-app.get('/api/stuff', (req, res, next) => {
-    const stuff = [
 
-        {
-            id: '1',
-            title: 'GD'
-        },
-
-        {
-            id: '2',
-            title: 'GT'
-        }
-    ];
-    res.status(200).json(stuff);
-})
 module.exports = app;
