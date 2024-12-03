@@ -19,7 +19,8 @@
     "express": "^4.21.1",
     "express-mongo-sanitize": "^2.2.0",
     "hpp": "^0.2.3",
-    "mongoose": "^8.8.3",
+    "mongoose": "^7.0.0",
+    "mongoose-unique-validator": "^4.0.1",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.7"
   }
