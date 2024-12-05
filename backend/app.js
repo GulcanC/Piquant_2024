@@ -10,6 +10,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const hpp = require('hpp');
 const morgan = require('morgan');
 
+const routeUser = require('./routes/user')
+
 // mongoose.connect('mongodb+srv://GC:GC_2024@clusterGC2024.65ftf.mongodb.net/',
 mongoose.connect(`mongodb+srv://${process.env.DB_USR_NAME}:${process.env.DB_PSW}@${process.env.DB_CLUSTER}.65ftf.mongodb.net/`)
 
@@ -21,46 +23,32 @@ app.use(express.json());
 // Error CORS => Cross Origin Resource Sharing, It is a security system which prevent HTTP calls between different servers, it prevents to access the unwanted requests to sensitive resources
 // For us we have two origines : localhost:3000 and localhost:4200, these two communicate with each other
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization')
-    res.setHeader('Access-Control-Allow-Headers', 'GET, POST, PUT, DELETE, PATCH, OPTIONS ')
-    next()
-})
+    res.setHeader("Access-Control-Allow-Origin", "*", "http://localhost:3000/api/auth/signup", "http://localhost:4200/"); // tout le monde peut se connecter a notre API
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization" // On donne l'autorisation d'utiliser certains headers sur l'objet requête
+    );
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    ); // On donne l'autorisation d'utiliser certains methodes sur l'objet requête; get post put delete patch
+    next(); // permet de passer à la lecture des autres middlewares
+  });
 
 app.use(bodyParser.json()); // transformer le corps, body en JSON object JS
 app.use(mongoSanitize()); // It sanitizes inputs against query selector injection attacks
 app.use(hpp()); // hpp moiddleware to protect against HTTP parameter pollution attacks
-app.use(morgan('combined')) // morgan middleware to create logs
+app.use(morgan('combined'));
 
-// add middleware
-// next() method comes from middleware, it allows the middleware passes to next middleware. 
-// for example here the app Express contains four elements of middleware. 
-
-
-/*
-// The first one
-app.use((req, res, next) => {
-    console.log('middleware request is got');
-    next();
-})
-
-// The second one
-app.use((req, res, next) => {
-    res.status(201);
-    next();
-})
-
-// The third one
-app.use((req, res) => {
-    res.json( {message : 'We got your request!'})
-    next();
-});
-
-//  The fourth one, is last element of the middleware save
-app.use((req, res) => {
-    console.log('response is send with success!')
-
-}) */
-
+app.use('/api/auth', routeUser);
 
 module.exports = app;
+
+
+
+
+
+
+
+
+
