@@ -40,7 +40,12 @@ app.use(mongoSanitize()); // It sanitizes inputs against query selector injectio
 app.use(hpp()); // hpp moiddleware to protect against HTTP parameter pollution attacks
 app.use(morgan('combined'));
 
+// http://localhost:3000/api/auth/login
+// http://localhost:3000/api/auth/signup
+
 app.use('/api/auth', routeUser);
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
 
