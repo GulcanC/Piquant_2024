@@ -78,9 +78,9 @@ exports.login = (req, res, next) => {
                             // if the password is correct, we have userId and token
                             // we install jsonwebtoken packagke to create a token
                             res.status(200).json({
-                                userID: user._id,
+                                userId: user._id,
                                 token: jwt.sign(
-                                    {userID: user._id},
+                                    {userId: user._id},
                                     `${process.env.JWT_KEY_TOKEN}`,
                                     {expiresIn: "12h"}
                                 )

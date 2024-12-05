@@ -11,6 +11,7 @@ const hpp = require('hpp');
 const morgan = require('morgan');
 
 const routeUser = require('./routes/user')
+const routeSauce = require('./routes/sauces')
 
 // mongoose.connect('mongodb+srv://GC:GC_2024@clusterGC2024.65ftf.mongodb.net/',
 mongoose.connect(`mongodb+srv://${process.env.DB_USR_NAME}:${process.env.DB_PSW}@${process.env.DB_CLUSTER}.65ftf.mongodb.net/`)
@@ -44,6 +45,7 @@ app.use(morgan('combined'));
 // http://localhost:3000/api/auth/signup
 
 app.use('/api/auth', routeUser);
+app.use('/api/sauce', routeSauce)
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
