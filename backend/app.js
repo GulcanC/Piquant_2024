@@ -44,8 +44,10 @@ app.use(morgan('combined'));
 // http://localhost:3000/api/auth/login
 // http://localhost:3000/api/auth/signup
 
+// http://localhost:3000/api/sauces
+
 app.use('/api/auth', routeUser);
-app.use('/api/sauce', routeSauce)
+app.use('/api/sauces', routeSauce)
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
